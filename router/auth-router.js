@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 
 import {
   home,
@@ -11,12 +11,21 @@ import {
   UserJwt,
   servicePage,
   AdminUsers,
-
+  AdminUserDelete,
+  AdminUserUpdate,
+  AdminUserEdit,
+  AdminContact,
+  AdminContactDel,
+  AdminService,
+  AdminServiceDelete,
+  AddServices,
 } from "../controllers/auth-controllers.js";
 
 const router = express.Router();
 import validate from "../middlewares/validate-middleware.js";
 import authMiddleware from "../middlewares/auth-middleware.js";
+import { adminMiddleware } from "../middlewares/admin-middleware.js";
+
 import {
   signupSchema,
   loginSchema,
@@ -25,12 +34,10 @@ import {
 
 router.route("/").get(home);
 
-
 router
   .route("/register")
   .post(validate(signupSchema), register)
   .get(registerUser);
-
 
 router.route("/login").post(validate(loginSchema), login).get(userLogin);
 
@@ -39,13 +46,26 @@ router
   .post(validate(contactSchema), contacts)
   .get(contactUser);
 
-router.route("/UserJwt").get(authMiddleware,UserJwt);
+router.route("/UserJwt").get(authMiddleware, UserJwt);
 
 router.route("/service").get(servicePage);
 
+router.route("/users").get(authMiddleware, adminMiddleware, AdminUsers);
+router
+  .route("/users/delete/:id")
+  .delete(authMiddleware, adminMiddleware, AdminUserDelete);
+router
+  .route("/admin/users/:id")
+  .get(authMiddleware, adminMiddleware, AdminUserUpdate);
+router
+  .route("/admin/users/:id")
+  .post(authMiddleware, adminMiddleware, AdminUserEdit);
 
-router.route("/users").get(AdminUsers);
-// router.route("/contacts").get(AdminContacts);
+router.route("/admin/contacts").get(authMiddleware, adminMiddleware,AdminContact);
+
+router.route("/admin/contacts/delete/:id").delete(authMiddleware, adminMiddleware,AdminContactDel);
 
 
+router.route("/admin/services").get(AdminService).post(authMiddleware, adminMiddleware,AdminServiceDelete);
+router.route("/addServices").post(authMiddleware, adminMiddleware,AddServices);
 export default router;

@@ -25,7 +25,7 @@ const authMiddleware = async (req, res, next) => {
       req.user = userData;
       req.token = token;
       req.userID = userData._id;
-
+     
     } catch (e) {
       console.log("JWT decoding error:", e);
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
@@ -38,5 +38,7 @@ const authMiddleware = async (req, res, next) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
 
 export default authMiddleware;

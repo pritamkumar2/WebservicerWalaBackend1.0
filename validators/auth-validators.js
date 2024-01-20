@@ -68,6 +68,8 @@ const contactSchema = z.object({
     })
     .min(3, { message: "message should be at least 3 characters" })
     .max(255, { message: "message should be less then 255 characters" }),
+
 });
+
 
 export { signupSchema, loginSchema, contactSchema };

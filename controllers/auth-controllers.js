@@ -133,15 +133,117 @@ const servicePage = async (req, res) => {
   }
 };
 
-const AdminUsers = async(req, res) => {
-  try{
-    const response = await User.find();
-    console.log("hi users are here:",response);
-  return res.status(200).json(response);   
-  }catch (e) {
-console.log('AdminUser error',e.message);
+const AdminUsers = async (req, res) => {
+  try {
+    const response = await User.find().select("-password -isAdmin");
+    console.log("hi users are here:", response);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log("AdminUser error", e.message);
   }
 };
+
+const AdminUserDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await User.deleteOne({ _id: id });
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log("AdminUserDelete error", e.message);
+  }
+};
+const AdminUserUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await User.findOne({ _id: id }, { password: 0 });
+    return res.status(200).json({ response });
+  } catch (e) {
+    console.log("AdminUserupdate error", e.message);
+  }
+};
+
+const AdminUserEdit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { username, email, phone } = req.body;
+    const response = await User.findOneAndUpdate(
+      { _id: id },
+      { username: username, email: email, phone: phone },
+      { new: true }
+    );
+    return res.status(200).json({ response });
+  } catch (e) {
+    console.log("AdminUserupdate error", e.message);
+  }
+};
+
+const AdminContact = async (req, res) => {
+  try {
+    const response = await Contact.find();
+    console.log(response);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log("AdminContact error", error);
+  }
+};
+
+const AdminContactDel = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("I am id", id);
+
+    const response = await Contact.deleteOne({ _id: id });
+
+    if (response.deletedCount === 1) {
+      return res.status(200).json({ messageDeleted: 'Contact deleted successfully' });
+    } else {
+      return res.status(400).json({ messageNotDeleted: 'Contact not found or could not be deleted' });
+    }
+  } catch (error) {
+    console.log("AdminContact error", error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+const AdminService = async (req, res) => {
+  try {
+    const response = await Service.find();
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log("AdminService error", error);
+  }
+};
+
+const AdminServiceDelete = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const response = await Service.deleteOne({ email: email });
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log("AdminServiceDelete error", error);
+  }
+};
+const AddServices = async (req, res) => {
+  try {
+    const { service, description, price, provider, image } = req.body;
+    if (!service || !description || !price || !provider || !image) {
+      return res.status(222).json({ message: "input required" });
+    } else {
+      const updateService = new Service({
+        service: service,
+        description: description,
+        price: price,
+        provider: provider,
+        image: image,
+      });
+      updateService.save();
+    }
+  } catch (error) {
+    console.log("AdminService adding error", error);
+  }
+};
+
 export {
   home,
   register,
@@ -153,4 +255,12 @@ export {
   UserJwt,
   servicePage,
   AdminUsers,
+  AdminUserDelete,
+  AdminUserUpdate,
+  AdminUserEdit,
+  AdminContact,
+  AdminContactDel,
+  AdminService,
+  AdminServiceDelete,
+  AddServices,
 };
