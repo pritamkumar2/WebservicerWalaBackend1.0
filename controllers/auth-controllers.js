@@ -195,16 +195,19 @@ const AdminContactDel = async (req, res) => {
     const response = await Contact.deleteOne({ _id: id });
 
     if (response.deletedCount === 1) {
-      return res.status(200).json({ messageDeleted: 'Contact deleted successfully' });
+      return res
+        .status(200)
+        .json({ messageDeleted: "Contact deleted successfully" });
     } else {
-      return res.status(400).json({ messageNotDeleted: 'Contact not found or could not be deleted' });
+      return res.status(400).json({
+        messageNotDeleted: "Contact not found or could not be deleted",
+      });
     }
   } catch (error) {
     console.log("AdminContact error", error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 const AdminService = async (req, res) => {
   try {
@@ -229,16 +232,16 @@ const AddServices = async (req, res) => {
     const { service, description, price, provider, image } = req.body;
     if (!service || !description || !price || !provider || !image) {
       return res.status(222).json({ message: "input required" });
-    } else {
-      const updateService = new Service({
-        service: service,
-        description: description,
-        price: price,
-        provider: provider,
-        image: image,
-      });
-      updateService.save();
     }
+    const updateService = new Service({
+      service: service,
+      description: description,
+      price: price,
+      provider: provider,
+      image: image,
+    });
+    updateService.save();
+    return res.status(200).json({ message: "service added successfully" });
   } catch (error) {
     console.log("AdminService adding error", error);
   }

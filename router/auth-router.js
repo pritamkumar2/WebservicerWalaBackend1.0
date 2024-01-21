@@ -61,11 +61,19 @@ router
   .route("/admin/users/:id")
   .post(authMiddleware, adminMiddleware, AdminUserEdit);
 
-router.route("/admin/contacts").get(authMiddleware, adminMiddleware,AdminContact);
+router
+  .route("/admin/contacts")
+  .get(authMiddleware, adminMiddleware, AdminContact);
 
-router.route("/admin/contacts/delete/:id").delete(authMiddleware, adminMiddleware,AdminContactDel);
+router
+  .route("/admin/contacts/delete/:id")
+  .delete(authMiddleware, adminMiddleware, AdminContactDel);
 
-
-router.route("/admin/services").get(AdminService).post(authMiddleware, adminMiddleware,AdminServiceDelete);
-router.route("/addServices").post(authMiddleware, adminMiddleware,AddServices);
+router
+  .route("/admin/services")
+  .get(AdminService)
+  .post(authMiddleware, adminMiddleware, AdminServiceDelete);
+router
+  .route("/admin/addServices")
+  .post(authMiddleware, adminMiddleware, AddServices);
 export default router;
