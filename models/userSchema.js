@@ -47,8 +47,6 @@ const contactData = new Schema({
   },
 });
 
-
-
 const serviceSchema = new Schema({
   service: {
     type: "string",
@@ -63,6 +61,10 @@ const serviceSchema = new Schema({
     required: true,
   },
   provider: {
+    type: "string",
+    required: true,
+  },
+  image: {
     type: "string",
     required: true,
   },
