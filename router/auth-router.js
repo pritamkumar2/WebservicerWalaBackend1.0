@@ -65,6 +65,7 @@ router
   .route("/admin/contacts")
   .get(authMiddleware, adminMiddleware, AdminContact);
 
+
 router
   .route("/admin/contacts/delete/:id")
   .delete(authMiddleware, adminMiddleware, AdminContactDel);
@@ -81,6 +82,17 @@ router.delete(
   adminMiddleware,
   AdminServiceDelete
 );
+
+
+router
+  .route("/admin/contacts/delete/:id")
+  .delete(authMiddleware, adminMiddleware, AdminContactDel);
+
+router
+  .route("/admin/services")
+  .get(AdminService)
+  .post(authMiddleware, adminMiddleware, AdminServiceDelete);
+
 router
   .route("/admin/addServices")
   .post(authMiddleware, adminMiddleware, AddServices);
