@@ -220,13 +220,34 @@ const AdminService = async (req, res) => {
 
 const AdminServiceDelete = async (req, res) => {
   try {
-    const email = req.body.email;
-    const response = await Service.deleteOne({ email: email });
-    return res.status(200).json(response);
+    const serviceId = req.params.id;
+    const service = await Service.findById(serviceId);
+
+    console.log(serviceId);
+    console.log(service);
+    if (!service) {
+      return res.status(400).json({
+        message: "Service not found or could not be deleted",
+      });
+    }
+
+    const response = await Service.deleteOne({ _id: serviceId });
+
+    if (response.deletedCount === 1) {
+      return res.status(200).json({
+        messageDeleted: "Service deleted successfully",
+      });
+    } else {
+      return res.status(400).json({
+        messageNotDeleted: "Service not found or could not be deleted",
+      });
+    }
   } catch (error) {
     console.log("AdminServiceDelete error", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 const AddServices = async (req, res) => {
   try {
     const { service, description, price, provider, image } = req.body;
